@@ -1,0 +1,49 @@
+---
+title: "Shiny en una sentada"
+---
+
+# Introducción{#intro}
+Bienvenidos al tutorial para desarrollar un visualizador geográfico súper simple utilizando [Shiny](https://shiny.rstudio.com/). Este taller fue desarrollado como parte de las actividades de la Semana de Divulgación de las Ciencias de Información Geoespacial 2022 de [CentroGeo](https://www.centrogeo.org.mx/).
+
+Shiny es una herramienta desarrollada por [RStudio](https://www.rstudio.com/) para crear de forma sencilla y usando únicamente el lenguaje de programación [R](https://www.r-project.org/). R provee paquetes de visualización y análisis estadístico muy poderosos, Shiny nos ayuda a usar las funcionalidades de R para construir tableros interactivos de visualización y análisis de forma rápida, sin recurrir directamente a tecnologías Web como Javascript o HTML.
+
+El objetivo del taller es guiarte paso a paso en el desarrollo de un tablero de visualización muy simple que incluya un mapa y un par de graficos dinámicos. Vamos a trabajar cn datos del [Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública](https://www.gob.mx/sesnsp) sobre incidencia delictiva en México. Para podr concentrarnos en este taller sólo en lo que tiene que ver con Shiny, vamos a usar una versión preprocesada de los datos abiertos.
+
+# Requisitos previos{#req}
+
+Antes que nada, para seguir el taller es necesario que tengas una carpeta organizada de la siguiente forma:
+
+```
+proyecto 
+│   app.R    
+└───01_input
+│   │   Mapa_scatter_delitos_prioritarios.rds
+│   │   ts_delitos_prioritarios.rds
+```
+
+Los datos los puedes bajar de aquí:
+
+* [Mapa_scatter_delitos_prioritarios.rds](https://www.dropbox.com/s/ucvtvdndj03de0v/Mapa_scatter_delitos_prioritarios.rds?dl=1)
+* [ts_delitos_prioritarios.rds](https://www.dropbox.com/s/ozybbsa0gjd1jed/ts_delitos_prioritarios.rds?dl=1)
+
+Además tenemos que tener instalados, además de R ([aquí encuentras las instrucciones para instalarlo](https://rstudio-education.github.io/hopr/starting.html)), una serie de paquetes:
+
+```{r}
+#| output: false
+#| eval: false
+install.packages("shiny")
+install.packages("tidyverse")
+install.packages("leaflet")
+```
+
+# Estructura del taller{#estructura}
+
+Una ves que hemos cubierto los requisitos previos, podemos empezar a trabajar en nuestro visualizador. El taller está estructurado de la siguiente forma:
+
+* En la Sección Gráficas vamos a ver cómo se hacen individualmente los componentes de la aplicación:
+    * [Scatterplot](scatter.qmd)
+    * Serie de tiempo
+    * Mapa
+* En la sección Tablero, vamos a juntar estos elementos y programar la interactividad.
+
+

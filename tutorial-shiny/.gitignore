@@ -1,0 +1,4 @@
+/.quarto/
+/_site/
+/01_input/*
+!/01_input/.gitkeep

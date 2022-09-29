@@ -1,0 +1,18 @@
+---
+title: "Acerca"
+about:
+  template: jolla
+#   image: profile.jpg
+  links:
+    - icon: twitter
+      text: plablo09
+      href: https://twitter.com/plablo09
+    - icon: twitter
+      text: NoeOsorioPK
+      href: https://twitter.com/NoeOsorioPK
+---
+
+Este tutorial fue desarrollado por:
+
+* Noé Osorio García 
+* Pablo López Ramírez
