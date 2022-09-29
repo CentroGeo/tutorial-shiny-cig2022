@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "scatter.html",
+    "href": "scatter.html",
+    "title": "Scatterplot",
+    "section": "",
+    "text": "Antes de empezar, cargamos los paquetes que vamos a usar\n\nlibrary(tidyverse)\n\nLo primero que tenemos que hacer es leer los datos y fijar el encoding (para que funcionen bien los acentos).\n\nbase_ts <- read_rds(\"01_input/ts_delitos_prioritarios.rds\")\nEncoding(base_ts$subtipo_de_delito) <- \"latin1\"\nhead(base_ts)\n\n\n\n\n\nfecha\nsubtipo_de_delito\nTotal\n\n\n\n\n2015-01-01\nRobo a casa habitación\n7850\n\n\n2015-01-01\nRobo a negocio\n7352\n\n\n2015-01-01\nRobo a transeúnte\n6613\n\n\n2015-01-01\nRobo a transportista\n543\n\n\n2015-01-01\nRobo en transporte público colectivo\n1733\n\n\n2015-01-01\nRobo en transporte público individual\n140\n\n\n\n\n\n\nComo podemos ver, los datos son una serie de tiempo de los diferentes tipos de delitos en formato largo."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Shiny en una sentada",
+    "section": "",
+    "text": "Requisitos previos\nAntes que nada, para seguir el taller es necesario que tengas una carpeta organizada de la siguiente forma:\nproyecto \n│   app.R    \n└───01_input\n│   │   Mapa_scatter_delitos_prioritarios.rds\n│   │   ts_delitos_prioritarios.rds\nLos datos los puedes bajar de aquí:\n\nMapa_scatter_delitos_prioritarios.rds\nts_delitos_prioritarios.rds\n\nAdemás tenemos que tener instalados, además de R (aquí encuentras las instrucciones para instalarlo), una serie de paquetes:\n\ninstall.packages(\"shiny\")\ninstall.packages(\"tidyverse\")\ninstall.packages(\"leaflet\")\n\n\n\nEstructura del taller\nUna ves que hemos cubierto los requisitos previos, podemos empezar a trabajar en nuestro visualizador. El taller está estructurado de la siguiente forma:\n\nEn la Sección Gráficas vamos a ver cómo se hacen individualmente los componentes de la aplicación:\n\nScatterplot\nSerie de tiempo\nMapa\n\nEn la sección Tablero, vamos a juntar estos elementos y programar la interactividad."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  }
+]

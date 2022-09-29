@@ -1,0 +1,1 @@
+Sitemap: https://CentroGeo.github.io/tutorial-shiny-cig2022/sitemap.xml
