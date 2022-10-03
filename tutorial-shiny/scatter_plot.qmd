@@ -22,9 +22,8 @@ Ahora podemos leer y explorar la base de donde vamos a sacar esta gráfica.
 
 ```{r}
 base_mapa <- read_rds("01_input/Mapa_scatter_delitos_prioritarios.rds")
-base_mapa <- sf::st_as_sf(base_mapa)
 Encoding(base_mapa$subtipo_de_delito) <- "latin1"
-Encoding(base_mapa$NOMGEO) <- "latin1"
+Encoding(base_mapa$entidad) <- "latin1"
 head(base_mapa)
 ```
 
@@ -35,6 +34,7 @@ head(base_mapa)
 
 Esta base es muy similar a la que usamos en la serie de tiempo, sólo que viene desagregada por entidad de la república, entonces tenemos una serie de tiempo para cada estado.
 
+El diagrama de dispersión que vamos a hacer compara un mes con el mes anterior, para ayudar al usuario en la comparación, vamos a agregar una diagonal que representa el caso en el que no hubo cambios entre los meses. Para agregar esta diagonal, necesitamos calcular el máximo para el delito seleccionado por el usuario:
 
 ```{r}
 eje <- base_mapa %>% 
@@ -42,4 +42,45 @@ eje <- base_mapa %>%
   filter(Total==max(Total))
 eje
 ```
+
+:::{.callout-note}
+En una aplicación ideal, el usuario debería poder escoger las fechas que se usan para la comparación. Por las limitaciones de tiempo de este taller, vamos a fijar estas dos fechas.
+
+:::
+
+Ya con este valor calculado, vamos primero a procesar los datos para hacer nuestra gráfica. Queremos, en lugar de la serie de tiempo, un DataFrame que tenga las entidades en las filas y dos columnas con los valores que corresponden a las fechas que queremos comparar. Para eso, lo que tenemos que hacer es _pivotear_ las tablas y pasar las fechas (que están en renglones) a columnas:
+ 
+
+```{r}
+base_mapa %>% 
+  filter(subtipo_de_delito=="Homicidio doloso") %>%
+  st_drop_geometry() %>%
+  pivot_wider(id_cols = c('clave_ent','entidad'),
+              names_from = 'fecha',
+              values_from = 'Total')
+```
+
+:::{.callout-warning}
+Fíjense en la llamada a `st_drop_geometry()`. Esta función le quita la geometría a nuestros datos, de otra forma no podríamos _pivotear_ la tabla
+:::
+
+Ahora sí, ya con los datos bien acomodados, podemos hacer la gráfica que queremos:
+
+```{r}
+base_mapa %>% 
+  filter(subtipo_de_delito=="Homicidio doloso") %>%
+  st_drop_geometry() %>%
+  pivot_wider(id_cols = c('clave_ent','entidad'),
+              names_from = 'fecha',
+              values_from = 'Total')  %>%
+  ggplot(aes(`2022-07-01`,`2022-08-01`))+
+  geom_point()+
+  scale_y_continuous(limits = c(0,eje$Total))+
+  scale_x_continuous(limits = c(0,eje$Total))+
+  geom_abline()+
+  theme_classic()+
+  ggrepel::geom_text_repel(aes(label=entidad))      
+```
+
+Todos los puntos que quedan por debajo de la diagonal nos indican una disminución en el último mes, mientras que por encima nos indican un aumento.
 

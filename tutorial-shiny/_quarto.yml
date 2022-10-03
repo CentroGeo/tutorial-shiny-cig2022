@@ -17,6 +17,7 @@ website:
         contents:
           - serie_tiempo.qmd
           - scatter_plot.qmd
+          - mapa.qmd
 
 format:
   html:
