@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tutorial Shiny - Scatterplot</title>
+<title>Tutorial Shiny - Serie de Tiempo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -155,7 +155,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Scatterplot</h1>
+      <h1 class="quarto-secondary-nav-title">Serie de Tiempo</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -183,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./scatter.html" class="sidebar-item-text sidebar-link active">Scatterplot</a>
+  <a href="./serie_tiempo.html" class="sidebar-item-text sidebar-link active">Serie de Tiempo</a>
   </div>
 </li>
       </ul>
@@ -200,7 +200,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Scatterplot</h1>
+<h1 class="title d-none d-lg-block">Serie de Tiempo</h1>
 </div>
 
 
@@ -214,8 +214,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>Vamos a aprender a hacer una gráfica en la que podamos ver la dispersión de un mes contra el anterior, de forma que podamos visualmente exporar si los delitos han subido, bajado o permanecido igual.</p>
-<p>Antes de empezar, cargamos los paquetes que vamos a usar</p>
+<p>La primera gráfica que vamos a hacer es una serie de tiempo para cada tipo de delito. La idea es que el tipo de delito sea seleccionado por el usuario de nuestro tablero, aquí vamos a trabajar con un delito fijo. Nustra serie va a mostrar un punto rojo en el máximo de la serie de tiempo y pondrá un marcador en el último valor de la serie.</p>
+<p>Antes de empezar, cargamos los paquetes que vamos a usar:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -271,6 +271,138 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>Como podemos ver, los datos son una serie de tiempo de los diferentes tipos de delitos en formato largo: la columna <code>subtipo_de_delito</code> discrimina los diferentes tipos de delito y la columna <code>Total</code> nos dice cuántos delitos hubo de ese tipo en cada periodo.</p>
+<p>Para poder aceptar el <em>input</em> del usuario y mostrar la serie de tiempo para el delito que seleccione, vamos anecesitar poder filtrar la serie por <code>subtipo_de_delito</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(base_ts <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(subtipo_de_delito <span class="sc">==</span> <span class="st">"Homicidio doloso"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">fecha</th>
+<th style="text-align: left;">subtipo_de_delito</th>
+<th style="text-align: right;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2015-01-01</td>
+<td style="text-align: left;">Homicidio doloso</td>
+<td style="text-align: right;">1354</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-02-01</td>
+<td style="text-align: left;">Homicidio doloso</td>
+<td style="text-align: right;">1388</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-03-01</td>
+<td style="text-align: left;">Homicidio doloso</td>
+<td style="text-align: right;">1379</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-04-01</td>
+<td style="text-align: left;">Homicidio doloso</td>
+<td style="text-align: right;">1442</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2015-05-01</td>
+<td style="text-align: left;">Homicidio doloso</td>
+<td style="text-align: right;">1601</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015-06-01</td>
+<td style="text-align: left;">Homicidio doloso</td>
+<td style="text-align: right;">1466</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Ya con nuestro edlito de interés filtrado, podemos fácilmente hacer una gráfica de línea de la serie de tiempo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>base_ts <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(subtipo_de_delito <span class="sc">==</span> <span class="st">"Homicidio doloso"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(fecha, Total)) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="serie_tiempo_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Muy bien, ahora pongamos un punto rojo que nos indique el máximo de la serie de tiempo. Para esto lo primero que necesitamos es identificar la fecha en la que sucedió ese máximo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>base_ts <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(subtipo_de_delito <span class="sc">==</span> <span class="st">"Homicidio doloso"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Total <span class="sc">==</span> <span class="fu">max</span>(Total))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">fecha</th>
+<th style="text-align: left;">subtipo_de_delito</th>
+<th style="text-align: right;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2018-07-01</td>
+<td style="text-align: left;">Homicidio doloso</td>
+<td style="text-align: right;">3074</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Noten cómo estamos aquí encadenando los dos filtros, uno sobre el tipo de delito y otro sobre el total.</p>
+</div>
+</div>
+<p>Ahora podemos usar ese código para agregar un <code>geom_point</code> en el lugar donde ocurrió el máximo. El truco es poder pasar el filtro a <code>geom_point</code> que recibe automaticamente los datos completos (<code>base_ts</code>). Para eso podemos sobreescribir el parámetro <code>data</code> que recibe <code>geom_point</code> y usar la notación especial <code>.</code> para referirnos a lo que recibe originalmente.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>base_ts <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(subtipo_de_delito <span class="sc">==</span> <span class="st">"Homicidio doloso"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(fecha, Total)) <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data=</span>. <span class="sc">%&gt;%</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>               <span class="fu">filter</span>(Total<span class="sc">==</span><span class="fu">max</span>(Total)),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">size=</span><span class="dv">3</span>,<span class="at">col=</span><span class="st">"red"</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="serie_tiempo_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Ahora sólo nos falta poner otro punto en el último valor observado para permitir al usuario comparar fácilmente el valor actual con el valor máximo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>base_ts <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(subtipo_de_delito <span class="sc">==</span> <span class="st">"Homicidio doloso"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(fecha, Total)) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data=</span>. <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>               <span class="fu">filter</span>(Total<span class="sc">==</span><span class="fu">max</span>(Total)),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">size=</span><span class="dv">3</span>,<span class="at">col=</span><span class="st">"red"</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data=</span>. <span class="sc">%&gt;%</span> </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>               <span class="fu">filter</span>(fecha<span class="sc">==</span><span class="fu">max</span>(fecha)),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">size=</span><span class="dv">3</span>,<span class="at">col=</span><span class="st">"black"</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    )    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="serie_tiempo_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Con esto terminamos la primera de las gráficas que queremos desplegar. En la siguiente sección vamos a hacer un diagrama de dispersión.</p>
 
 
 

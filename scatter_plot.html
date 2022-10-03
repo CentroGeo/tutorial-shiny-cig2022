@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tutorial Shiny - Scatterplot</title>
+<title>Tutorial Shiny - Diagrama de dispersión</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -155,7 +155,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Scatterplot</h1>
+      <h1 class="quarto-secondary-nav-title">Diagrama de dispersión</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -183,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./scatter.html" class="sidebar-item-text sidebar-link active">Scatterplot</a>
+  <a href="./serie_tiempo.html" class="sidebar-item-text sidebar-link">Serie de Tiempo</a>
   </div>
 </li>
       </ul>
@@ -200,7 +200,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Scatterplot</h1>
+<h1 class="title d-none d-lg-block">Diagrama de dispersión</h1>
 </div>
 
 
@@ -214,63 +214,171 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>Vamos a aprender a hacer una gráfica en la que podamos ver la dispersión de un mes contra el anterior, de forma que podamos visualmente exporar si los delitos han subido, bajado o permanecido igual.</p>
-<p>Antes de empezar, cargamos los paquetes que vamos a usar</p>
+<p>Siguiendo con la idea de ayudar al usuario a poder identificar cómo han ido variando los delitos en el tiempo, ahora vamos a hacer un diagrama de dispersión (<em>scatterplot</em>) en el que vamos a comparar los delitos de los últmos dos meses en la base de datos (julio y agosto de 2022) para un delito en específico.</p>
+<p>Una vez más, empezamos por cargar los paquetes que vamos a usar:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Lo primero que tenemos que hacer es leer los datos y fijar el encoding (para que funcionen bien los acentos).</p>
+<p>Ahora podemos leer y explorar la base de donde vamos a sacar esta gráfica.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>base_ts <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"01_input/ts_delitos_prioritarios.rds"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Encoding</span>(base_ts<span class="sc">$</span>subtipo_de_delito) <span class="ot">&lt;-</span> <span class="st">"latin1"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(base_ts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>base_mapa <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"01_input/Mapa_scatter_delitos_prioritarios.rds"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>base_mapa <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_as_sf</span>(base_mapa)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Encoding</span>(base_mapa<span class="sc">$</span>subtipo_de_delito) <span class="ot">&lt;-</span> <span class="st">"latin1"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Encoding</span>(base_mapa<span class="sc">$</span>NOMGEO) <span class="ot">&lt;-</span> <span class="st">"latin1"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(base_mapa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 17%">
+<col style="width: 7%">
+<col style="width: 16%">
+<col style="width: 4%">
+<col style="width: 5%">
+<col style="width: 16%">
+<col style="width: 23%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">fecha</th>
 <th style="text-align: left;">subtipo_de_delito</th>
+<th style="text-align: left;">clave_ent</th>
+<th style="text-align: left;">entidad</th>
 <th style="text-align: right;">Total</th>
+<th style="text-align: left;">CVEGEO</th>
+<th style="text-align: left;">NOMGEO</th>
+<th style="text-align: left;">geometry</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">2015-01-01</td>
+<td style="text-align: left;">2022-07-01</td>
 <td style="text-align: left;">Robo a casa habitación</td>
-<td style="text-align: right;">7850</td>
+<td style="text-align: left;">01</td>
+<td style="text-align: left;">Aguascalientes</td>
+<td style="text-align: right;">164</td>
+<td style="text-align: left;">01</td>
+<td style="text-align: left;">Aguascalientes</td>
+<td style="text-align: left;">MULTIPOLYGON (((-102.2879 2…</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">2015-01-01</td>
-<td style="text-align: left;">Robo a negocio</td>
-<td style="text-align: right;">7352</td>
+<td style="text-align: left;">2022-07-01</td>
+<td style="text-align: left;">Robo a casa habitación</td>
+<td style="text-align: left;">02</td>
+<td style="text-align: left;">Baja California</td>
+<td style="text-align: right;">294</td>
+<td style="text-align: left;">02</td>
+<td style="text-align: left;">Baja California</td>
+<td style="text-align: left;">MULTIPOLYGON (((-112.3007 2…</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">2015-01-01</td>
-<td style="text-align: left;">Robo a transeúnte</td>
-<td style="text-align: right;">6613</td>
+<td style="text-align: left;">2022-07-01</td>
+<td style="text-align: left;">Robo a casa habitación</td>
+<td style="text-align: left;">03</td>
+<td style="text-align: left;">Baja California Sur</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: left;">03</td>
+<td style="text-align: left;">Baja California Sur</td>
+<td style="text-align: left;">MULTIPOLYGON (((-109.8945 2…</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">2015-01-01</td>
-<td style="text-align: left;">Robo a transportista</td>
-<td style="text-align: right;">543</td>
+<td style="text-align: left;">2022-07-01</td>
+<td style="text-align: left;">Robo a casa habitación</td>
+<td style="text-align: left;">04</td>
+<td style="text-align: left;">Campeche</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: left;">04</td>
+<td style="text-align: left;">Campeche</td>
+<td style="text-align: left;">MULTIPOLYGON (((-91.9565 20…</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">2015-01-01</td>
-<td style="text-align: left;">Robo en transporte público colectivo</td>
-<td style="text-align: right;">1733</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">2015-01-01</td>
-<td style="text-align: left;">Robo en transporte público individual</td>
+<td style="text-align: left;">2022-07-01</td>
+<td style="text-align: left;">Robo a casa habitación</td>
+<td style="text-align: left;">05</td>
+<td style="text-align: left;">Coahuila de Zaragoza</td>
 <td style="text-align: right;">140</td>
+<td style="text-align: left;">05</td>
+<td style="text-align: left;">Coahuila de Zaragoza</td>
+<td style="text-align: left;">MULTIPOLYGON (((-102.3108 2…</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2022-07-01</td>
+<td style="text-align: left;">Robo a casa habitación</td>
+<td style="text-align: left;">06</td>
+<td style="text-align: left;">Colima</td>
+<td style="text-align: right;">123</td>
+<td style="text-align: left;">06</td>
+<td style="text-align: left;">Colima</td>
+<td style="text-align: left;">MULTIPOLYGON (((-114.7373 1…</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<p>Como podemos ver, los datos son una serie de tiempo de los diferentes tipos de delitos en formato largo: la columna <code>subtipo_de_delito</code> discrimina los diferentes tipos de delito y la columna <code>Total</code> nos dice cuántos delitos hubo de ese tipo en cada periodo.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>¡Esta base de datos contiene geometrías! La columna <code>geometry</code> contiene las coordenadas del polígono de cada estado. En esta gráfica no las vamos a usar, pero más adelante sí, para hacer un mapa.</p>
+</div>
+</div>
+<p>Esta base es muy similar a la que usamos en la serie de tiempo, sólo que viene desagregada por entidad de la república, entonces tenemos una serie de tiempo para cada estado.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>eje <span class="ot">&lt;-</span> base_mapa <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(subtipo_de_delito<span class="sc">==</span><span class="st">"Homicidio doloso"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Total<span class="sc">==</span><span class="fu">max</span>(Total))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>eje</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 17%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 10%">
+<col style="width: 29%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">fecha</th>
+<th style="text-align: left;">subtipo_de_delito</th>
+<th style="text-align: left;">clave_ent</th>
+<th style="text-align: left;">entidad</th>
+<th style="text-align: right;">Total</th>
+<th style="text-align: left;">CVEGEO</th>
+<th style="text-align: left;">NOMGEO</th>
+<th style="text-align: left;">geometry</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2022-07-01</td>
+<td style="text-align: left;">Homicidio doloso</td>
+<td style="text-align: left;">11</td>
+<td style="text-align: left;">Guanajuato</td>
+<td style="text-align: right;">298</td>
+<td style="text-align: left;">11</td>
+<td style="text-align: left;">Guanajuato</td>
+<td style="text-align: left;">MULTIPOLYGON (((-101.35 21….</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 
 
 

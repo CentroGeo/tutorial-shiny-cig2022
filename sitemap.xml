@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://CentroGeo.github.io/tutorial-shiny-cig2022/scatter.html</loc>
-    <lastmod>2022-09-29T21:12:30.599Z</lastmod>
-  </url>
-  <url>
     <loc>https://CentroGeo.github.io/tutorial-shiny-cig2022/index.html</loc>
-    <lastmod>2022-09-29T21:12:31.635Z</lastmod>
+    <lastmod>2022-10-03T18:44:01.075Z</lastmod>
   </url>
   <url>
     <loc>https://CentroGeo.github.io/tutorial-shiny-cig2022/about.html</loc>
-    <lastmod>2022-09-29T21:12:31.899Z</lastmod>
+    <lastmod>2022-10-03T18:44:01.383Z</lastmod>
+  </url>
+  <url>
+    <loc>https://CentroGeo.github.io/tutorial-shiny-cig2022/serie_tiempo.html</loc>
+    <lastmod>2022-10-03T18:44:04.739Z</lastmod>
+  </url>
+  <url>
+    <loc>https://CentroGeo.github.io/tutorial-shiny-cig2022/scatter_plot.html</loc>
+    <lastmod>2022-10-03T18:44:08.307Z</lastmod>
   </url>
 </urlset>
