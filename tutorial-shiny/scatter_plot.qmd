@@ -1,0 +1,45 @@
+---
+title: "Diagrama de dispersión"
+format: 
+    html:
+        df-print: kable
+---
+
+Siguiendo con la idea de ayudar al usuario a poder identificar cómo han ido variando los delitos en el tiempo, ahora vamos a hacer un diagrama de dispersión (_scatterplot_) en el que vamos a comparar los delitos de los últmos dos meses en la base de datos (julio y agosto de 2022) para un delito en específico.
+
+Una vez más, empezamos por cargar los paquetes que vamos a usar:
+
+
+```{r}
+#| output: false
+library(tidyverse)
+library(sf)
+library(ggrepel)
+```
+
+Ahora podemos leer y explorar la base de donde vamos a sacar esta gráfica.
+
+
+```{r}
+base_mapa <- read_rds("01_input/Mapa_scatter_delitos_prioritarios.rds")
+base_mapa <- sf::st_as_sf(base_mapa)
+Encoding(base_mapa$subtipo_de_delito) <- "latin1"
+Encoding(base_mapa$NOMGEO) <- "latin1"
+head(base_mapa)
+```
+
+:::{.callout-note}
+¡Esta base de datos contiene geometrías! La columna `geometry` contiene las coordenadas del polígono de cada estado. En esta gráfica no las vamos a usar, pero más adelante sí, para hacer un mapa.
+
+:::
+
+Esta base es muy similar a la que usamos en la serie de tiempo, sólo que viene desagregada por entidad de la república, entonces tenemos una serie de tiempo para cada estado.
+
+
+```{r}
+eje <- base_mapa %>% 
+  filter(subtipo_de_delito=="Homicidio doloso") %>% 
+  filter(Total==max(Total))
+eje
+```
+

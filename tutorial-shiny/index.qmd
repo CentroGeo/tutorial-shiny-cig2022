@@ -2,6 +2,8 @@
 title: "Shiny en una sentada"
 ---
 
+![](img/semana.jpeg)
+
 # Introducción{#intro}
 Bienvenidos al tutorial para desarrollar un visualizador geográfico súper simple utilizando [Shiny](https://shiny.rstudio.com/). Este taller fue desarrollado como parte de las actividades de la Semana de Divulgación de las Ciencias de Información Geoespacial 2022 de [CentroGeo](https://www.centrogeo.org.mx/).
 
