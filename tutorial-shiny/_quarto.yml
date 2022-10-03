@@ -16,6 +16,7 @@ website:
       - section: "Graficas"
         contents:
           - serie_tiempo.qmd
+          - scatter_plot.qmd
 
 format:
   html:

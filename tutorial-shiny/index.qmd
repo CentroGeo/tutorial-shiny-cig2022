@@ -43,8 +43,8 @@ install.packages("leaflet")
 Una ves que hemos cubierto los requisitos previos, podemos empezar a trabajar en nuestro visualizador. El taller está estructurado de la siguiente forma:
 
 * En la Sección Gráficas vamos a ver cómo se hacen individualmente los componentes de la aplicación:
-    * [Scatterplot](scatter.qmd)
-    * Serie de tiempo
+    * [Scatterplot](serie_tiempo.qmd)
+    * [Serie de tiempo](scatter_plot.qmd)
     * Mapa
 * En la sección Tablero, vamos a juntar estos elementos y programar la interactividad.
 
