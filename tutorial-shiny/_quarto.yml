@@ -15,7 +15,7 @@ website:
     contents:
       - section: "Graficas"
         contents:
-          - scatter.qmd
+          - serie_tiempo.qmd
 
 format:
   html:

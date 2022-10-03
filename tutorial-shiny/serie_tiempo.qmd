@@ -1,0 +1,89 @@
+---
+title: "Serie de Tiempo"
+format: 
+    html:
+        df-print: kable
+---
+
+La primera gráfica que vamos a hacer es una serie de tiempo para cada tipo de delito. La idea es que el tipo de delito sea seleccionado por el usuario de nuestro tablero, aquí vamos a trabajar con un delito fijo. Nustra serie va a mostrar un punto rojo en el máximo de la serie de tiempo y pondrá un marcador en el último valor de la serie.
+
+Antes de empezar, cargamos los paquetes que vamos a usar:
+
+```{r}
+#| output: false
+library(tidyverse)
+```
+
+
+Lo primero que tenemos que hacer es leer los datos y fijar el encoding (para que funcionen bien los acentos).
+
+```{r}
+base_ts <- read_rds("01_input/ts_delitos_prioritarios.rds")
+Encoding(base_ts$subtipo_de_delito) <- "latin1"
+head(base_ts)
+```
+
+Como podemos ver, los datos son una serie de tiempo de los diferentes tipos de delitos en formato largo: la columna `subtipo_de_delito` discrimina los diferentes tipos de delito y la columna `Total` nos dice cuántos delitos hubo de ese tipo en cada periodo.
+
+Para poder aceptar el _input_ del usuario y mostrar la serie de tiempo para el delito que seleccione, vamos anecesitar poder filtrar la serie por `subtipo_de_delito`:
+
+
+```{r}
+head(base_ts %>% 
+    filter(subtipo_de_delito == "Homicidio doloso"))
+```
+
+Ya con nuestro edlito de interés filtrado, podemos fácilmente hacer una gráfica de línea de la serie de tiempo:
+
+```{r}
+base_ts %>%
+    filter(subtipo_de_delito == "Homicidio doloso") %>%
+    ggplot(aes(fecha, Total)) +
+        geom_line()
+```
+
+Muy bien, ahora pongamos un punto rojo que nos indique el máximo de la serie de tiempo. Para esto lo primero que necesitamos es identificar la fecha en la que sucedió ese máximo.
+
+```{r}
+base_ts %>% 
+    filter(subtipo_de_delito == "Homicidio doloso") %>%
+    filter(Total == max(Total))
+```
+
+:::{.callout-note}
+Noten cómo estamos aquí encadenando los dos filtros, uno sobre el tipo de delito y otro sobre el total.
+
+:::
+
+Ahora podemos usar ese código para agregar un `geom_point` en el lugar donde ocurrió el máximo. El truco es poder pasar el filtro a `geom_point` que recibe automaticamente los datos completos (`base_ts`). Para eso podemos sobreescribir el parámetro `data` que recibe `geom_point` y usar la notación especial `.` para referirnos a lo que recibe originalmente.
+
+
+```{r}
+base_ts %>%
+    filter(subtipo_de_delito == "Homicidio doloso") %>%
+    ggplot(aes(fecha, Total)) +
+    geom_line() + 
+    geom_point(data=. %>% 
+               filter(Total==max(Total)),
+               size=3,col="red"
+    )
+```
+
+Ahora sólo nos falta poner otro punto en el último valor observado para permitir al usuario comparar fácilmente el valor actual con el valor máximo.
+
+```{r}
+base_ts %>%
+    filter(subtipo_de_delito == "Homicidio doloso") %>%
+    ggplot(aes(fecha, Total)) +
+    geom_line() + 
+    geom_point(data=. %>% 
+               filter(Total==max(Total)),
+               size=3,col="red"
+    ) +
+    geom_point(data=. %>% 
+               filter(fecha==max(fecha)),
+               size=3,col="black"
+    )    
+```
+
+Con esto terminamos la primera de las gráficas que queremos desplegar. En la siguiente sección vamos a hacer un diagrama de dispersión.
