@@ -191,6 +191,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <a href="./scatter_plot.html" class="sidebar-item-text sidebar-link active">Diagrama de dispersión</a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mapa.html" class="sidebar-item-text sidebar-link">Mapa de delitos</a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -229,10 +234,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Ahora podemos leer y explorar la base de donde vamos a sacar esta gráfica.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>base_mapa <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"01_input/Mapa_scatter_delitos_prioritarios.rds"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>base_mapa <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_as_sf</span>(base_mapa)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Encoding</span>(base_mapa<span class="sc">$</span>subtipo_de_delito) <span class="ot">&lt;-</span> <span class="st">"latin1"</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Encoding</span>(base_mapa<span class="sc">$</span>NOMGEO) <span class="ot">&lt;-</span> <span class="st">"latin1"</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(base_mapa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Encoding</span>(base_mapa<span class="sc">$</span>subtipo_de_delito) <span class="ot">&lt;-</span> <span class="st">"latin1"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Encoding</span>(base_mapa<span class="sc">$</span>entidad) <span class="ot">&lt;-</span> <span class="st">"latin1"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(base_mapa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="table table-sm table-striped">
@@ -338,6 +342,7 @@ Note
 </div>
 </div>
 <p>Esta base es muy similar a la que usamos en la serie de tiempo, sólo que viene desagregada por entidad de la república, entonces tenemos una serie de tiempo para cada estado.</p>
+<p>El diagrama de dispersión que vamos a hacer compara un mes con el mes anterior, para ayudar al usuario en la comparación, vamos a agregar una diagonal que representa el caso en el que no hubo cambios entre los meses. Para agregar esta diagonal, necesitamos calcular el máximo para el delito seleccionado por el usuario:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>eje <span class="ot">&lt;-</span> base_mapa <span class="sc">%&gt;%</span> </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(subtipo_de_delito<span class="sc">==</span><span class="st">"Homicidio doloso"</span>) <span class="sc">%&gt;%</span> </span>
@@ -384,6 +389,273 @@ Note
 </div>
 </div>
 </div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En una aplicación ideal, el usuario debería poder escoger las fechas que se usan para la comparación. Por las limitaciones de tiempo de este taller, vamos a fijar estas dos fechas.</p>
+</div>
+</div>
+<p>Ya con este valor calculado, vamos primero a procesar los datos para hacer nuestra gráfica. Queremos, en lugar de la serie de tiempo, un DataFrame que tenga las entidades en las filas y dos columnas con los valores que corresponden a las fechas que queremos comparar. Para eso, lo que tenemos que hacer es <em>pivotear</em> las tablas y pasar las fechas (que están en renglones) a columnas:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>base_mapa <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(subtipo_de_delito<span class="sc">==</span><span class="st">"Homicidio doloso"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(<span class="st">'clave_ent'</span>,<span class="st">'entidad'</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="st">'fecha'</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="st">'Total'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">clave_ent</th>
+<th style="text-align: left;">entidad</th>
+<th style="text-align: right;">2022-07-01</th>
+<th style="text-align: right;">2022-08-01</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">01</td>
+<td style="text-align: left;">Aguascalientes</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">02</td>
+<td style="text-align: left;">Baja California</td>
+<td style="text-align: right;">265</td>
+<td style="text-align: right;">234</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">03</td>
+<td style="text-align: left;">Baja California Sur</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">04</td>
+<td style="text-align: left;">Campeche</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">05</td>
+<td style="text-align: left;">Coahuila de Zaragoza</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">06</td>
+<td style="text-align: left;">Colima</td>
+<td style="text-align: right;">57</td>
+<td style="text-align: right;">75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">07</td>
+<td style="text-align: left;">Chiapas</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">08</td>
+<td style="text-align: left;">Chihuahua</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">202</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">09</td>
+<td style="text-align: left;">Ciudad de México</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: right;">79</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">Durango</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">11</td>
+<td style="text-align: left;">Guanajuato</td>
+<td style="text-align: right;">298</td>
+<td style="text-align: right;">251</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">Guerrero</td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">92</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">Hidalgo</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">14</td>
+<td style="text-align: left;">Jalisco</td>
+<td style="text-align: right;">193</td>
+<td style="text-align: right;">175</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">México</td>
+<td style="text-align: right;">210</td>
+<td style="text-align: right;">221</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">16</td>
+<td style="text-align: left;">Michoacán de Ocampo</td>
+<td style="text-align: right;">166</td>
+<td style="text-align: right;">180</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">17</td>
+<td style="text-align: left;">Morelos</td>
+<td style="text-align: right;">99</td>
+<td style="text-align: right;">88</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">18</td>
+<td style="text-align: left;">Nayarit</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">19</td>
+<td style="text-align: left;">Nuevo León</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: right;">155</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">20</td>
+<td style="text-align: left;">Oaxaca</td>
+<td style="text-align: right;">89</td>
+<td style="text-align: right;">115</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">21</td>
+<td style="text-align: left;">Puebla</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">90</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">22</td>
+<td style="text-align: left;">Querétaro</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">23</td>
+<td style="text-align: left;">Quintana Roo</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">55</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">24</td>
+<td style="text-align: left;">San Luis Potosí</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">51</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">25</td>
+<td style="text-align: left;">Sinaloa</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">33</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">26</td>
+<td style="text-align: left;">Sonora</td>
+<td style="text-align: right;">141</td>
+<td style="text-align: right;">131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">27</td>
+<td style="text-align: left;">Tabasco</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">28</td>
+<td style="text-align: left;">Tamaulipas</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">51</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">29</td>
+<td style="text-align: left;">Tlaxcala</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">30</td>
+<td style="text-align: left;">Veracruz de Ignacio de la Llave</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: right;">98</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">31</td>
+<td style="text-align: left;">Yucatán</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">32</td>
+<td style="text-align: left;">Zacatecas</td>
+<td style="text-align: right;">123</td>
+<td style="text-align: right;">101</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fíjense en la llamada a <code>st_drop_geometry()</code>. Esta función le quita la geometría a nuestros datos, de otra forma no podríamos <em>pivotear</em> la tabla</p>
+</div>
+</div>
+<p>Ahora sí, ya con los datos bien acomodados, podemos hacer la gráfica que queremos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>base_mapa <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(subtipo_de_delito<span class="sc">==</span><span class="st">"Homicidio doloso"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(<span class="st">'clave_ent'</span>,<span class="st">'entidad'</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="st">'fecha'</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="st">'Total'</span>)  <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="st">`</span><span class="at">2022-07-01</span><span class="st">`</span>,<span class="st">`</span><span class="at">2022-08-01</span><span class="st">`</span>))<span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,eje<span class="sc">$</span>Total))<span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,eje<span class="sc">$</span>Total))<span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>()<span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()<span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  ggrepel<span class="sc">::</span><span class="fu">geom_text_repel</span>(<span class="fu">aes</span>(<span class="at">label=</span>entidad))      </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: ggrepel: 10 unlabeled data points (too many overlaps). Consider
+increasing max.overlaps</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="scatter_plot_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Todos los puntos que quedan por debajo de la diagonal nos indican una disminución en el último mes, mientras que por encima nos indican un aumento.</p>
 
 
 
