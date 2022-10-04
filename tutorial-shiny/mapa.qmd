@@ -5,7 +5,7 @@ format:
         df-print: kable
 ---
 
-El último elemento que nos falta es el mapa de nuestro tablero de visualización. Para hacer el mapa vamos a usar el paquete [{leaflet}](https://rstudio.github.io/leaflet/), que es una interfase para la librería de Javascript de visualización geográfica [Leaflet](https://leafletjs.com/). Empezamos, como siempre, cargando los paquetes que vamos a usar
+El último elemento que nos falta es el mapa de nuestro tablero de visualización. Para hacer el mapa vamos a usar el paquete [{leaflet}](https://rstudio.github.io/leaflet/), que es una interfaz para la librería de Javascript de visualización geográfica [Leaflet](https://leafletjs.com/). Empezamos, como siempre, cargando los paquetes que vamos a usar
 
 
 ```{r}
@@ -32,16 +32,61 @@ Una vez más, tenemos que filtrar por tipo de delito y por fecha (recuerden que 
 mapa_leaflet <- base_mapa %>% 
   filter(fecha==max(fecha)) %>% 
   filter(subtipo_de_delito=="Homicidio doloso")
-mapa_leaflet
+head(mapa_leaflet)
 ```
 
 Ahora, para poder crear un mapa de coropletas, en el que los colores representen la cantidad de delitos, necesitamos una paleta de colores:
 
 ```{r}
-pal <- colorNumeric("inferno",mapa_leaflet$Total,reverse = T,na.color = NA)
+pal <- colorNumeric("inferno", mapa_leaflet$Total, reverse = T, na.color = NA)
 ```
 
-Ya con esto, crtear un mapa interactivo es muy fácil:
+Ya con esto, crtear un mapa interactivo es muy fácil. El paquete {leaflet} toma como entrada la geometría que queremos representar, en nuestro caso, la geometría la tenemos en la columna `geometry` del DataFrame `mapa_leaflet`:
+
+```{r}
+head(mapa_leaflet$geometry)
+```
+
+Esta geometría internamente se transformará en un geoJSON para representarla usando Leaflet.
+
+Además de la geometría, necesitamos el valor que vamos a representar en el mapa, en este caso el Total del delito seleccionado. En este caso, la función `pal` que definimos arriba, convierte el valor en un color utilizando una rampa:
+
+```{r}
+head(pal(mapa_leaflet$Total))
+```
+
+Ya con estos elementos podemos crear un mapa de forma muy sencilla:
+
+```{r}
+leaflet() %>% 
+  addPolygons(data=mapa_leaflet$geometry,
+              fillColor = pal(mapa_leaflet$Total),
+              color="black",
+              weight = 1,
+              opacity = 1,
+              fillOpacity = .7,
+              label = mapa_leaflet$NOMGEO,
+              group = "Entidades")
+```
+
+Lo que estamos haciendo aquí es crear un _objeto_ de la calse leaflet y pasarle, en `addPolygons`, los datos que queremos ver en el mapa junto con algunas opciones de configuración.
+
+Este ya es un mapa funcional pero demasiado simple, vamos a agregarle una leyenda:
+
+```{r}
+leaflet() %>% 
+  addPolygons(data=mapa_leaflet$geometry,
+              fillColor = pal(mapa_leaflet$Total),
+              color="black",
+              weight = 1,
+              opacity = 1,
+              fillOpacity = .7,
+              label = mapa_leaflet$NOMGEO,
+              group = "Entidades")%>% 
+  addLegend(pal = pal,values = mapa_leaflet$Total)
+```
+
+Un poco mejor, ahora agreguemos un _mapa base_ para contextualizar el mapa. El mapa base lo vamos a agregar con la función [`addProviderTiles`](https://www.rdocumentation.org/packages/leaflet/versions/2.1.1/topics/addProviderTiles), [aquí](https://leaflet-extras.github.io/leaflet-providers/preview/) podemos ver una lista de los mapas base disponibles.
 
 ```{r}
 leaflet() %>% 
@@ -54,7 +99,5 @@ leaflet() %>%
               fillOpacity = .7,
               label = mapa_leaflet$NOMGEO,
               group = "Entidades")%>% 
-  addLegend(pal = pal,values = mapa_leaflet$Total) %>% 
-  addLayersControl(overlayGroups = "Entidades")
+  addLegend(pal = pal,values = mapa_leaflet$Total)
 ```
-
