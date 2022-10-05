@@ -1,5 +1,5 @@
 ---
-title: "Aplicación"
+title: "Introducción"
 format: 
     html:
         df-print: kable
@@ -34,3 +34,5 @@ Para entender cómno funciona vmos a ver un ejemplo muy sencillo tomado de la do
 ```
 
 La aplicación tiene un único elemento en la interfaz de usuario: un conjunto de _radio buttons_ y lo único que hace en el servidor es regresar el valor _verbatim_
+
+En la [siguiente sección](https://plablo.shinyapps.io/mi-primer-app-CIG-2022/) vamos a ver un ejemplo algo más elaborado, antes de pasar a nuestra aplicación completa.

@@ -1,5 +1,8 @@
 project:
   type: website
+  render:
+  - "*.qmd"
+  - "!internal/"
 
 website:
   title: "Tutorial Shiny"
@@ -18,6 +21,11 @@ website:
           - serie_tiempo.qmd
           - scatter_plot.qmd
           - mapa.qmd
+      - section: "Aplicación"
+        contents:
+          - app.qmd
+          - text: "App"
+            href: https://plablo.shinyapps.io/mi-primer-app-CIG-2022/
 
 format:
   html:
