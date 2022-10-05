@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.163">
+<meta name="generator" content="quarto-1.1.251">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -198,6 +198,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Aplicación</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./app.html" class="sidebar-item-text sidebar-link">Introducción</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="https://plablo.shinyapps.io/mi-primer-app-CIG-2022/" class="sidebar-item-text sidebar-link">App</a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -236,8 +256,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="intro" class="level1">
 <h1>Introducción</h1>
 <p>Bienvenidos al tutorial para desarrollar un visualizador geográfico súper simple utilizando <a href="https://shiny.rstudio.com/">Shiny</a>. Este taller fue desarrollado como parte de las actividades de la Semana de Divulgación de las Ciencias de Información Geoespacial 2022 de <a href="https://www.centrogeo.org.mx/">CentroGeo</a>.</p>
-<p>Shiny es una herramienta desarrollada por <a href="https://www.rstudio.com/">RStudio</a> para crear de forma sencilla y usando únicamente el lenguaje de programación <a href="https://www.r-project.org/">R</a>. R provee paquetes de visualización y análisis estadístico muy poderosos, Shiny nos ayuda a usar las funcionalidades de R para construir tableros interactivos de visualización y análisis de forma rápida, sin recurrir directamente a tecnologías Web como Javascript o HTML.</p>
-<p>El objetivo del taller es guiarte paso a paso en el desarrollo de un tablero de visualización muy simple que incluya un mapa y un par de graficos dinámicos. Vamos a trabajar cn datos del <a href="https://www.gob.mx/sesnsp">Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública</a> sobre incidencia delictiva en México. Para podr concentrarnos en este taller sólo en lo que tiene que ver con Shiny, vamos a usar una versión preprocesada de los datos abiertos.</p>
+<p>Shiny es una herramienta desarrollada por <a href="https://www.rstudio.com/">RStudio</a> para crear, de forma sencilla y usando únicamente el lenguaje de programación <a href="https://www.r-project.org/">R</a>, tableros interactivos de visualización de datos. R provee paquetes de visualización y análisis estadístico muy poderosos, Shiny nos ayuda a usar estas funcionalidades de R en la cosntrucción de visualizaciones interactivas, abriendo a los analistas dde datos la posibilidad de generar herramientas de comunicación sin recurrir directamente a tecnologías Web como Javascript o HTML.</p>
+<p>El objetivo del taller es guiarte paso a paso en el desarrollo de un tablero de visualización muy simple que incluya un mapa y un par de graficos dinámicos. Vamos a trabajar cn datos del <a href="https://www.gob.mx/sesnsp">Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública</a> sobre incidencia delictiva en México. Para podr concentrarnos en este taller sólo en lo que tiene que ver con Shiny, vamos a usar una versión preprocesada de los datos abiertos. Como gui, en la siguiente figura presentamos un <em>wireframe</em> del tablero que vamos a desarrollar.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/wireframe-shiny.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption"><em>Wireframe del tablero de visualización</em></figcaption><p></p>
+</figure>
+</div>
 </section>
 <section id="req" class="level1">
 <h1>Requisitos previos</h1>
@@ -256,8 +282,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"shiny"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"leaflet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"sf"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggrepel"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"leaflet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>La instalación de estos paquetes depende un poco de cada plataforma (windows, linux, Mac), pero en general debería ser relativamente simple.</p>
+<p>Para desarrollar la aplicación puedes usar el IDE para R <a href="https://www.rstudio.com/products/rstudio/">Rstudio</a> o <a href="https://code.visualstudio.com/">Visual Studio</a> con la <a href="https://code.visualstudio.com/docs/languages/r">extensión de R</a> instalada.</p>
 </section>
 <section id="estructura" class="level1">
 <h1>Estructura del taller</h1>
