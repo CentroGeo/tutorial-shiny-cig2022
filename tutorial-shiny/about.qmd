@@ -1,18 +1,23 @@
 ---
 title: "Acerca"
 about:
-  template: jolla
-#   image: profile.jpg
+  template: solana
+  image: img/cgeo.jpg
   links:
     - icon: twitter
-      text: plablo09
-      href: https://twitter.com/plablo09
-    - icon: twitter
-      text: NoeOsorioPK
-      href: https://twitter.com/NoeOsorioPK
+      text: twitter
+      href: https://twitter.com/CentroGeo_
+    - icon: github
+      text: Github
+      href: https://github.com/CentroGeo
 ---
+Este tutorial fue desarrollado para la Semana de Divulación de las Ciencias de Información Geoespacial 2022 por CentroGeo.
 
-Este tutorial fue desarrollado por:
+CentroGeo es un Centro Público de Investigación, parte del Sistema de Centros Conacyt
 
-* Noé Osorio García 
-* Pablo López Ramírez
+::: {layout="[1, -1, 1]"}
+![Noé Osorio García [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/bukotsunikki.svg?style=social&label=)](https://https://twitter.com/noeosoriopk)](img/noe.jpeg){width=120px fig-align="left"}
+
+![Pablo López Ramírez [![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/bukotsunikki.svg?style=social&label=)](https://https://twitter.com/noeosoriopk)](img/pablo.JPG){width=120px fig-align="left"}
+:::
+

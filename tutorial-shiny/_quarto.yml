@@ -23,9 +23,10 @@ website:
           - mapa.qmd
       - section: "Aplicación"
         contents:
-          - app.qmd
-          - text: "App"
+          - intro_shiny.qmd
+          - text: "Mi primera aplicación"
             href: https://plablo.shinyapps.io/mi-primer-app-CIG-2022/
+          - integrando.qmd
 
 format:
   html:

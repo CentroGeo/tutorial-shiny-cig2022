@@ -1,0 +1,38 @@
+---
+title: "Introducción"
+format: 
+    html:
+        df-print: kable
+---
+
+En las secciones previas hemos ido desarrollando cada uno de los componentes que integrarán nuestro tablero. Ahora lo que vamos a hacer es unir esos componentes en una visualización interactiva utilizando [Shiny](https://shiny.rstudio.com/).
+
+La estructura básica de una aplicación de Shiny consiste de tres componentes:
+
+* Un _objeto_ de interfaz de usuario (UI)
+* Una función de servidor (server)
+* La llamada a `shinyApp`
+
+Vamos a _empaquetar_ estos tres componentes en un único script: `app.R`.
+
+Podemos pensar muy en general en el siguiente esquema para entender cómo funciona una aplicación de Shiny:
+
+```{mermaid}
+flowchart TD;
+    A(UI) <--> B(server);
+    C[(Datos)] <--> B;
+```
+
+La interfaz de usuario es lo que vemos desplegado en la página web y determina los componentes de la visualización, los elementos con los que puede interactuar el usuario y la forma en la que estos se despliegan. La función `server` recoge el _input_ del usuario, va a la base de datos, hace los cómputos necesarios y regresa el resultado en forma de tablas, mapas o gráficas.
+
+La conexión entre el input del usuario y las funciones de servidor se lleva a cabo a través de dos piezas fundamentales: _etiquetas_ de HTML y funciones reactivas de Shiny. Las etiquetas controlan los lugares de la aplicación en donde se van a renderizar los componentes resultado de la interacción, mientras que las funciones reactivas consultan los datos y hacen las cuentas correspondientes.
+
+Para entender cómno funciona vmos a ver un ejemplo muy sencillo tomado de la documentación de quarto.
+
+```{=html}
+<iframe width="800px" height="1000px" style="border:2px solid #dee2e6;" src="https://minecr.shinyapps.io/shiny_in_quarto/"></iframe>
+```
+
+La aplicación tiene un único elemento en la interfaz de usuario: un conjunto de _radio buttons_ y lo único que hace en el servidor es regresar el valor _verbatim_
+
+En la [siguiente sección](https://plablo.shinyapps.io/mi-primer-app-CIG-2022/) vamos a ver un ejemplo algo más elaborado, antes de pasar a nuestra aplicación completa.
