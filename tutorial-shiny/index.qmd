@@ -5,11 +5,11 @@ title: "Shiny en una sentada"
 ![](img/semana.jpeg)
 
 # Introducción{#intro}
-Bienvenidos al tutorial para desarrollar un visualizador geográfico súper simple utilizando [Shiny](https://shiny.rstudio.com/). Este taller fue desarrollado como parte de las actividades de la Semana de Divulgación de las Ciencias de Información Geoespacial 2022 de [CentroGeo](https://www.centrogeo.org.mx/).
+Bienvenidos al tutorial para desarrollar un visualizador geográfico súper simple utilizando [Shiny](https://shiny.rstudio.com/). Este taller forma parte de las actividades de la Semana de Divulgación de las Ciencias de Información Geoespacial 2022 de [CentroGeo](https://www.centrogeo.org.mx/).
 
-Shiny es una herramienta desarrollada por [RStudio](https://www.rstudio.com/) para crear, de forma sencilla y usando únicamente el lenguaje de programación [R](https://www.r-project.org/), tableros interactivos de visualización de datos. R provee paquetes de visualización y análisis estadístico muy poderosos, Shiny nos ayuda a usar estas funcionalidades de R en la cosntrucción de visualizaciones interactivas, abriendo a los analistas dde datos la posibilidad de generar herramientas de comunicación sin recurrir directamente a tecnologías Web como Javascript o HTML.
+Shiny es una herramienta desarrollada por [RStudio](https://www.rstudio.com/) para crear, de forma sencilla y usando únicamente el lenguaje de programación [R](https://www.r-project.org/), tableros interactivos de visualización de datos. R provee paquetes de visualización y análisis estadístico muy poderosos, Shiny nos ayuda a usar estas funcionalidades de R en la construcción de visualizaciones interactivas, abriendo a los analistas de datos la posibilidad de generar herramientas de comunicación sin recurrir directamente a tecnologías Web como Javascript o HTML.
 
-El objetivo del taller es guiarte paso a paso en el desarrollo de un tablero de visualización muy simple que incluya un mapa y un par de graficos dinámicos. Vamos a trabajar cn datos del [Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública](https://www.gob.mx/sesnsp) sobre incidencia delictiva en México. Para podr concentrarnos en este taller sólo en lo que tiene que ver con Shiny, vamos a usar una versión preprocesada de los datos abiertos. Como gui, en la siguiente figura presentamos un _wireframe_ del tablero que vamos a desarrollar.
+El objetivo del taller es guiarte paso a paso en el desarrollo de un tablero de visualización muy simple que incluya un mapa y un par de graficos dinámicos. Vamos a trabajar con datos del [Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública](https://www.gob.mx/sesnsp) sobre incidencia delictiva en México. Para poder concentrarnos en este taller sólo en lo que tiene que ver con Shiny, vamos a usar una versión preprocesada de los datos abiertos. Como guía, en la siguiente figura presentamos un _wireframe_ del tablero que vamos a desarrollar.
 
 ![_Wireframe del tablero de visualización_](img/wireframe-shiny.png)
 
@@ -56,6 +56,6 @@ Una ves que hemos cubierto los requisitos previos, podemos empezar a trabajar en
     * [Scatterplot](serie_tiempo.qmd)
     * [Serie de tiempo](scatter_plot.qmd)
     * [Mapa](mapa.qmd)
-* En la sección Tablero, vamos a juntar estos elementos y programar la interactividad.
+* En la sección Aplicación, vamos a juntar estos elementos y programar la interactividad.
 
 

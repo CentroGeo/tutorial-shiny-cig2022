@@ -360,4 +360,4 @@ Ahora, pega este código en un archivo nuevo, guárdalo como `app.R` (conservand
 
 Para ver la aplicación funcionando en vivo:
 
-[Visualizador de delitos]()
+[Visualizador de delitos](https://plablo.shinyapps.io/shiny-apps-tutorial-cig-2022/)

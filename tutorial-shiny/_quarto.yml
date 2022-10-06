@@ -5,13 +5,23 @@ project:
   - "!internal/"
 
 website:
-  title: "Tutorial Shiny"
+  title: "Shiny en una sentada"
+  repo-url: https://github.com/CentroGeo/tutorial-shiny-cig2022
+  repo-actions: [issue]
   navbar:
+    logo: "cgeo_logo.png"
     left:
       - href: index.qmd
         text: Home
       - href: about.qmd
         text: Acerca
+    right:
+      - icon: github
+        href: https://github.com/CentroGeo/tutorial-shiny-cig2022
+        aria-label: GitHub
+      - icon: twitter
+        href: https://twitter.com/CentroGeo_
+        aria-label: Twitter
   sidebar:
     style: "floating"
     search: true

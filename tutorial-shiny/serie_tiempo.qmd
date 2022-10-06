@@ -5,7 +5,7 @@ format:
         df-print: kable
 ---
 
-La primera gráfica que vamos a hacer es una serie de tiempo para cada tipo de delito. La idea es que el tipo de delito sea seleccionado por el usuario de nuestro tablero, aquí vamos a trabajar con un delito fijo. Nustra serie va a mostrar un punto rojo en el máximo de la serie de tiempo y pondrá un marcador en el último valor de la serie.
+La primera gráfica que vamos a hacer es una serie de tiempo para cada tipo de delito. La idea es que el tipo de delito sea seleccionado por el usuario de nuestro tablero, aquí vamos a trabajar con un delito fijo. Nuestra serie va a mostrar un punto rojo en el máximo de la serie de tiempo y pondrá un marcador en el último valor de la serie.
 
 Antes de empezar, cargamos los paquetes que vamos a usar:
 
