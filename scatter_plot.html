@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tutorial Shiny - Diagrama de dispersión</title>
+<title>Shiny en una sentada - Diagrama de dispersión</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -133,8 +133,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./cgeo_logo.png" alt="" class="navbar-logo">
+    </a>
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Tutorial Shiny</span>
+    <span class="navbar-title">Shiny en una sentada</span>
     </a>
   </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -147,6 +150,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./about.html">Acerca</a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/CentroGeo/tutorial-shiny-cig2022"><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/CentroGeo_"><i class="bi bi-twitter" role="img" aria-label="Twitter">
+</i> 
+ </a>
   </li>  
 </ul>
               <div id="quarto-search" class="" title="Search"></div>
@@ -249,7 +264,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>Siguiendo con la idea de ayudar al usuario a poder identificar cómo han ido variando los delitos en el tiempo, ahora vamos a hacer un diagrama de dispersión (<em>scatterplot</em>) en el que vamos a comparar los delitos de los últmos dos meses en la base de datos (julio y agosto de 2022) para un delito en específico.</p>
+<p>Siguiendo con la idea de ayudar al usuario a poder identificar cómo han ido variando los delitos en el tiempo, ahora vamos a hacer un diagrama de dispersión (<em>scatterplot</em>) en el que vamos a comparar los incidentes de los últmos dos meses en la base de datos (julio y agosto de 2022) para un delito en específico.</p>
 <p>Una vez más, empezamos por cargar los paquetes que vamos a usar:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
