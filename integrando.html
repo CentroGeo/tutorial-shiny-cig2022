@@ -529,7 +529,7 @@ to "Spanish" cannot be honored</code></pre>
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Incluye los últimos dos meses de información del SESNSP</span></span>
 <span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># con el total a nivel nacional de Carpetas O víctimas por entidad.</span></span>
 <span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co"># y su geometría del Marco Geoestadístico.</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>base_mapa <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"01_input/Mapa_scatter_delitos_prioritarios.rds"</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>base_mapa <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"01_input/mapa_simplificado.rds"</span>)</span>
 <span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>base_mapa <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_as_sf</span>(base_mapa)</span>
 <span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="fu">Encoding</span>(base_mapa<span class="sc">$</span>subtipo_de_delito) <span class="ot">&lt;-</span> <span class="st">"latin1"</span></span>
 <span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="fu">Encoding</span>(base_mapa<span class="sc">$</span>entidad) <span class="ot">&lt;-</span> <span class="st">"latin1"</span></span>

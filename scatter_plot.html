@@ -273,7 +273,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Ahora podemos leer y explorar la base de donde vamos a sacar esta gráfica.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>base_mapa <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"01_input/Mapa_scatter_delitos_prioritarios.rds"</span>)</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>base_mapa <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"01_input/mapa_simplificado.rds"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Encoding</span>(base_mapa<span class="sc">$</span>subtipo_de_delito) <span class="ot">&lt;-</span> <span class="st">"latin1"</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Encoding</span>(base_mapa<span class="sc">$</span>entidad) <span class="ot">&lt;-</span> <span class="st">"latin1"</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(base_mapa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -311,7 +311,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td style="text-align: right;">164</td>
 <td style="text-align: left;">01</td>
 <td style="text-align: left;">Aguascalientes</td>
-<td style="text-align: left;">MULTIPOLYGON (((-102.2879 2…</td>
+<td style="text-align: left;">MULTIPOLYGON (((-102.2417 2…</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2022-07-01</td>
@@ -321,7 +321,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td style="text-align: right;">294</td>
 <td style="text-align: left;">02</td>
 <td style="text-align: left;">Baja California</td>
-<td style="text-align: left;">MULTIPOLYGON (((-112.3007 2…</td>
+<td style="text-align: left;">MULTIPOLYGON (((-112.3 28.3…</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">2022-07-01</td>
@@ -331,7 +331,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td style="text-align: right;">120</td>
 <td style="text-align: left;">03</td>
 <td style="text-align: left;">Baja California Sur</td>
-<td style="text-align: left;">MULTIPOLYGON (((-109.8945 2…</td>
+<td style="text-align: left;">MULTIPOLYGON (((-109.8051 2…</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2022-07-01</td>
@@ -341,7 +341,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td style="text-align: right;">120</td>
 <td style="text-align: left;">04</td>
 <td style="text-align: left;">Campeche</td>
-<td style="text-align: left;">MULTIPOLYGON (((-91.9565 20…</td>
+<td style="text-align: left;">MULTIPOLYGON (((-90.45286 2…</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">2022-07-01</td>
@@ -351,7 +351,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td style="text-align: right;">140</td>
 <td style="text-align: left;">05</td>
 <td style="text-align: left;">Coahuila de Zaragoza</td>
-<td style="text-align: left;">MULTIPOLYGON (((-102.3108 2…</td>
+<td style="text-align: left;">MULTIPOLYGON (((-102.2657 2…</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">2022-07-01</td>
@@ -361,7 +361,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td style="text-align: right;">123</td>
 <td style="text-align: left;">06</td>
 <td style="text-align: left;">Colima</td>
-<td style="text-align: left;">MULTIPOLYGON (((-114.7373 1…</td>
+<td style="text-align: left;">MULTIPOLYGON (((-114.7019 1…</td>
 </tr>
 </tbody>
 </table>
@@ -422,7 +422,7 @@ Note
 <td style="text-align: right;">298</td>
 <td style="text-align: left;">11</td>
 <td style="text-align: left;">Guanajuato</td>
-<td style="text-align: left;">MULTIPOLYGON (((-101.35 21….</td>
+<td style="text-align: left;">MULTIPOLYGON (((-101.3059 2…</td>
 </tr>
 </tbody>
 </table>
