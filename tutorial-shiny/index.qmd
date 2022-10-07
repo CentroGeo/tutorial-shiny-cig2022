@@ -28,7 +28,7 @@ proyecto
 
 Los datos los puedes bajar de aquí:
 
-* [Mapa_scatter_delitos_prioritarios.rds](https://www.dropbox.com/s/ucvtvdndj03de0v/Mapa_scatter_delitos_prioritarios.rds?dl=1)
+* [mapa_simplificado.rds](https://www.dropbox.com/s/wque47b6wxicwpw/mapa_simplificado.rds?dl=1)
 * [ts_delitos_prioritarios.rds](https://www.dropbox.com/s/ozybbsa0gjd1jed/ts_delitos_prioritarios.rds?dl=1)
 
 Además tenemos que tener instalados, además de R ([aquí encuentras las instrucciones para instalarlo](https://rstudio-education.github.io/hopr/starting.html)), una serie de paquetes:

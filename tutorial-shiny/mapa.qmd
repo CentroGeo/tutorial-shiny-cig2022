@@ -18,7 +18,7 @@ library(leaflet)
 Y leyendo los datos, de la misma forma que en el [diagrama de dispersión](scatter_plot.qmd):
 
 ```{r}
-base_mapa <- read_rds("01_input/Mapa_scatter_delitos_prioritarios.rds")
+base_mapa <- read_rds("01_input/mapa_simplificado.rds")
 Encoding(base_mapa$subtipo_de_delito) <- "latin1"
 Encoding(base_mapa$entidad) <- "latin1"
 head(base_mapa)
